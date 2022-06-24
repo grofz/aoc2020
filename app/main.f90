@@ -7,8 +7,12 @@
     !call day02('inp/02/input.txt')
     !call day02('inp/02/sample.txt')
 
-    call day03('inp/03/input.txt')
+    !call day03('inp/03/input.txt')
     !call day03('inp/03/sample.txt')
+
+    !call day04('inp/04/sample.txt')
+    !call day04('inp/04/sample3.txt')
+    call day04('inp/04/input.txt')
   end program main
 
 
@@ -98,3 +102,34 @@
     print '("Answer day02 part 1 = ",i0,1x,l1)', cnt(2), cnt(2)==7 .or. cnt(2)==173
     print '("Answer day02 part 2 = ",i0,1x,l1)', mlt, mlt==336 .or. mlt==4385176320_I8
   end subroutine day03
+
+
+
+  subroutine day04(file)
+    use day04_mod
+    implicit none
+    character(len=*), intent(in) :: file
+
+    type(passport_t) :: pas
+    integer :: fid, nvalid, nvalid2
+    character(len=500) :: ln
+    character(len=:), allocatable :: err
+
+    open(newunit=fid, file=file, status='old')
+    nvalid = 0
+    nvalid2 = 0
+    do
+      call read_to_line(fid,ln)
+      print '(a)', trim(ln)
+      if (ln==' ') exit
+      call pas % read_from_line(ln)
+ print *, pas%is_passport(), pas%is_valid(err)
+ if (err /= 'ok') print *, err
+      if (pas % is_passport()) nvalid = nvalid + 1
+      if (pas % is_valid()) nvalid2 = nvalid2 + 1
+ print *
+    end do
+    print '("Answer day04 part 1 = ",i0,1x,l1)', nvalid, nvalid==2 .or. nvalid==219
+    print '("Answer day04 part 2 = ",i0,1x,l1)', nvalid2, nvalid2==127
+  end subroutine day04
+
