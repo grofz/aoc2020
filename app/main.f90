@@ -14,11 +14,13 @@
     !call day04('inp/04/sample3.txt')
     !call day04('inp/04/input.txt')
 
+    !call day13('inp/13/test.txt')
+    call day13('inp/13/input.txt')
 
 
 
     !call day24('inp/24/test.txt')
-    call day24('inp/24/input.txt')
+    !call day24('inp/24/input.txt')
 
     !call day25('inp/25/test.txt')
     !call day25('inp/25/input.txt')
@@ -141,6 +143,58 @@
     print '("Answer day04 part 1 = ",i0,1x,l1)', nvalid, nvalid==2 .or. nvalid==219
     print '("Answer day04 part 2 = ",i0,1x,l1)', nvalid2, nvalid2==127
   end subroutine day04
+
+
+
+  subroutine day13(file)
+    use day13_mod
+    implicit none
+    character(len=*), intent(in) :: file
+
+    integer :: fid, i, idmin
+    integer(I8) :: tnow, tmin
+    integer(I8) :: time, mp
+    character(len=10000) :: line
+    integer(I8), allocatable :: arr(:)
+
+    open(newunit=fid, file=file, status='old')
+    read(fid,*) tnow
+    read(fid,'(a)') line
+    call disect_line(line, arr)
+    close(fid)
+
+    print '(i0)', tnow
+    print '(*(i0,:,1x))', arr
+
+    tmin = huge(tmin)
+    do i=1, size(arr)
+      if (arr(i) < 0) cycle
+      time = tnext(tnow, arr(i))
+      if (time < tmin) then
+        tmin = time
+        idmin = arr(i)
+      end if
+    end do
+    print '("tnext= ",i0,"  by id ",i0,"  in ",i0)', tmin, idmin, tmin-tnow
+    print *, 'Answer is ', idmin*(tmin-tnow), idmin*(tmin-tnow)==222
+
+    time = 0
+    mp = arr(1)
+    print '(/,a4,1x,a4,1x,a18)', ' bus', 'wait', '              time'
+    print '(i4,1x,i4,1x,i18)', arr(1), 1-1, time
+    do i=2,size(arr)
+      if (arr(i) < 0) cycle
+      time = next_time(time, mp, arr(i), int(i-1, kind=I8))
+      ! this works only because bus numbers are primes, otherwise
+      ! a more complex way should be used to update "mp"
+      mp = mp * arr(i)
+      print '(i4,1x,i4,1x,i18)', arr(i), i-1, time
+    end do
+    print *
+    print *, 'Answer is ', time, time==408270049879073_I8 .or. time==1068781_I8
+  end subroutine day13
+
+
 
 
 
