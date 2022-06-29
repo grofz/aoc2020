@@ -12,7 +12,16 @@
 
     !call day04('inp/04/sample.txt')
     !call day04('inp/04/sample3.txt')
-    call day04('inp/04/input.txt')
+    !call day04('inp/04/input.txt')
+
+
+
+
+    !call day24('inp/24/test.txt')
+    call day24('inp/24/input.txt')
+
+    !call day25('inp/25/test.txt')
+    !call day25('inp/25/input.txt')
   end program main
 
 
@@ -132,4 +141,57 @@
     print '("Answer day04 part 1 = ",i0,1x,l1)', nvalid, nvalid==2 .or. nvalid==219
     print '("Answer day04 part 2 = ",i0,1x,l1)', nvalid2, nvalid2==127
   end subroutine day04
+
+
+
+  subroutine day24(file)
+    use day24_mod
+    implicit none
+    character(len=*), intent(in) :: file
+
+    type(tile_t), allocatable :: tiles(:)
+    type(floor_t) :: flr
+    integer :: i, ans
+
+    call read_from_file(file, tiles)
+    !call tile_sort(tiles)
+    !call tile_remove_dupl(tiles)
+    !ans = size(tiles)
+    !print *, 'Answer to part 1 is :', ans, ans==360 .or. ans==10
+
+    call flr % init(tiles)
+    ans = flr % blacks()
+    print *, 'Answer to part 1 is :', ans, ans==360 .or. ans==10
+    call flr%print()
+    do i=1,100
+      call flr % expand()
+    end do
+    call flr%print()
+    ans = flr%blacks()
+    print *, 'Answer to part 2 is :', ans, ans==2208 .or. ans==3924
+  end subroutine day24
+
+
+
+  subroutine day25(file)
+    use day25_mod, only : START_VAL, I8, brute_force_ls, handshake
+    implicit none
+    character(len=*), intent(in) :: file
+
+    integer(I8) :: card_key, door_key, fid
+    integer(I8) :: card_ls, door_ls, enc_key
+
+    open(newunit=fid, file=file, status='old')
+    read(fid,*) card_key
+    read(fid,*) door_key
+    print '("keys = ",2(i8,1x))', card_key, door_key
+    close(fid)
+
+    card_ls = brute_force_ls(START_VAL, card_key)
+    door_ls = brute_force_ls(START_VAL, door_key)
+    print '("ls   = ",2(i8,1x))', card_ls, door_ls
+    enc_key = handshake(card_ls, door_ls, card_key, door_key)
+    if (enc_key < 0) error stop 'hanshake failed'
+    print '("key  = ",i8,1x,l1)', enc_key, enc_key==5025281 .or. enc_key==14897079
+  end subroutine day25
 
