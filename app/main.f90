@@ -14,7 +14,10 @@
     !call day04('inp/04/sample3.txt')
     !call day04('inp/04/input.txt')
 
-    call day05('inp/05/input.txt')
+    !call day05('inp/05/input.txt')
+
+    call day08('inp/08/sample.txt')
+    call day08('inp/08/input.txt')
 
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
@@ -171,6 +174,21 @@
     print '("Answer to day 5/1 is ",i0,1x,l1)', max_id, max_id==820 .or. max_id==801
     print '("Answer to day 5/2 is ",i0,1x,l1)', missing_id, missing_id==597
   end subroutine day05
+
+
+
+  subroutine day08(file)
+    use day08_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    type(computer_t) :: zx
+    integer :: iexit, ans1, ans2
+    call zx % load_program(file)
+    call zx % run_program(iexit, ans1)
+    call zx % find_working_program(ans2)
+    print '("Answer day 08/1 is ",i0,1x,l1)', ans1, ans1==5 .or. ans1==1446
+    print '("Answer day 08/2 is ",i0,1x,l1)', ans2, ans2==8 .or. ans2==1403
+  end subroutine day08
 
 
 
