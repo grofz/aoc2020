@@ -14,8 +14,10 @@
     !call day04('inp/04/sample3.txt')
     !call day04('inp/04/input.txt')
 
+    call day05('inp/05/input.txt')
+
     !call day13('inp/13/test.txt')
-    call day13('inp/13/input.txt')
+    !call day13('inp/13/input.txt')
 
 
 
@@ -87,8 +89,8 @@
     use parse_mod, only : read_pattern
     implicit none
     character(len=*), intent(in) :: file
-    
-    
+
+
     integer, parameter :: I8 = selected_int_kind(18)
     character(len=1), allocatable :: aa(:,:)
     integer :: i, j, cnt(5)
@@ -143,6 +145,32 @@
     print '("Answer day04 part 1 = ",i0,1x,l1)', nvalid, nvalid==2 .or. nvalid==219
     print '("Answer day04 part 2 = ",i0,1x,l1)', nvalid2, nvalid2==127
   end subroutine day04
+
+
+
+  subroutine day05(file)
+    use day05_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    type(boarding_t), allocatable :: bps(:)
+    integer :: max_id, i, next_id, missing_id
+
+    call read_from_file(file, bps)
+    call sort_bps(bps)
+    max_id = -1
+    next_id = -1
+    missing_id = -1
+    do i=1, size(bps)
+      if (bps(i) % id > max_id) max_id = bps(i) % id
+      if (next_id /= bps(i)%id .and. next_id /= -1) then
+        if (missing_id /= -1) error stop 'main: more than one missing...'
+        missing_id = next_id
+      end if
+      next_id = bps(i)%id + 1
+    end do
+    print '("Answer to day 5/1 is ",i0,1x,l1)', max_id, max_id==820 .or. max_id==801
+    print '("Answer to day 5/2 is ",i0,1x,l1)', missing_id, missing_id==597
+  end subroutine day05
 
 
 
@@ -248,4 +276,3 @@
     if (enc_key < 0) error stop 'hanshake failed'
     print '("key  = ",i8,1x,l1)', enc_key, enc_key==5025281 .or. enc_key==14897079
   end subroutine day25
-
