@@ -16,13 +16,16 @@
 
     !call day05('inp/05/input.txt')
 
-    call day08('inp/08/sample.txt')
-    call day08('inp/08/input.txt')
+    call day06('inp/06/sample.txt')
+    call day06('inp/06/input.txt')
+
+    !call day08('inp/08/sample.txt')
+    !call day08('inp/08/input.txt')
 
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
 
-
+    !call day15()
 
     !call day24('inp/24/test.txt')
     !call day24('inp/24/input.txt')
@@ -177,6 +180,29 @@
 
 
 
+  subroutine day06(file)
+    use day06_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    type(form_t), allocatable :: forms(:), forms2(:)
+    integer :: i, ans1, ans2
+
+    call read_answers(file, forms, 1)
+    call read_answers(file, forms2, 2)
+    ans1 = 0
+    ans2 = 0
+    do i=1, size(forms)
+      ans1 = ans1 + count(forms(i)%ans)
+      ans2 = ans2 + count(forms2(i)%ans)
+print *, i, count(forms(i)%ans), count(forms2(i)%ans)
+    end do
+    print '("Answer day 06/1 is ",i0,1x,l1)', ans1, ans1==6532 .or. ans1==11
+    print '("Answer day 06/2 is ",i0,1x,l1)', ans2, ans2==3427 .or. ans2==6
+
+  end subroutine day06
+
+
+
   subroutine day08(file)
     use day08_mod
     implicit none
@@ -189,6 +215,26 @@
     print '("Answer day 08/1 is ",i0,1x,l1)', ans1, ans1==5 .or. ans1==1446
     print '("Answer day 08/2 is ",i0,1x,l1)', ans2, ans2==8 .or. ans2==1403
   end subroutine day08
+
+
+
+  subroutine day15()
+    use day15_mod
+    implicit none
+    type(game_t) :: game
+    !integer, parameter :: START(*) = [3, 1, 2]
+    integer, parameter :: START(*) = [0,5,4,1,10,14,7]
+    integer :: i, number
+
+    do i=1, MAX_NUM !2020
+      if (i <= size(START)) then
+        call game % say_init(START(i))
+      else
+        call game % say_next(number)
+      end if
+    end do
+    print *, 'Answer is : ', game % last_said
+  end subroutine day15
 
 
 
