@@ -19,14 +19,17 @@
     !call day06('inp/06/sample.txt')
     !call day06('inp/06/input.txt')
 
-    call day07('inp/07/sample.txt')
-    call day07('inp/07/input.txt')
+    !call day07('inp/07/sample.txt')
+    !call day07('inp/07/input.txt')
 
     !call day08('inp/08/sample.txt')
     !call day08('inp/08/input.txt')
 
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
+
+    call day14('inp/14/sample.txt')
+    call day14('inp/14/input.txt')
 
     !call day15()
 
@@ -268,26 +271,6 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
 
 
-  subroutine day15()
-    use day15_mod
-    implicit none
-    type(game_t) :: game
-    !integer, parameter :: START(*) = [3, 1, 2]
-    integer, parameter :: START(*) = [0,5,4,1,10,14,7]
-    integer :: i, number
-
-    do i=1, MAX_NUM !2020
-      if (i <= size(START)) then
-        call game % say_init(START(i))
-      else
-        call game % say_next(number)
-      end if
-    end do
-    print *, 'Answer is : ', game % last_said
-  end subroutine day15
-
-
-
   subroutine day13(file)
     use day13_mod
     implicit none
@@ -337,6 +320,43 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
   end subroutine day13
 
 
+
+  subroutine day14(file)
+    use day14_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    type(instruction_t), allocatable :: list(:)
+    type(state_t) :: zx
+    integer :: i
+    integer(I8) :: ans1
+
+    call read_all_instructions(file, list)
+    do i = 1, size(list)
+      call zx % do_instruction(list(i))
+    end do
+    ans1 = zx % sum_memory()
+    print *, 'Answer 14/1 is ', ans1, ans1==165 .or. ans1==14839536808842_I8
+  end subroutine day14
+
+
+
+    subroutine day15()
+      use day15_mod
+      implicit none
+      type(game_t) :: game
+      !integer, parameter :: START(*) = [3, 1, 2]
+      integer, parameter :: START(*) = [0,5,4,1,10,14,7]
+      integer :: i, number
+
+      do i=1, MAX_NUM !2020
+        if (i <= size(START)) then
+          call game % say_init(START(i))
+        else
+          call game % say_next(number)
+        end if
+      end do
+      print *, 'Answer is : ', game % last_said
+    end subroutine day15
 
 
 
