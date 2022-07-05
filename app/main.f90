@@ -29,6 +29,7 @@
     !call day13('inp/13/input.txt')
 
     call day14('inp/14/sample.txt')
+    call day14('inp/14/sample2.txt')
     call day14('inp/14/input.txt')
 
     !call day15()
@@ -322,20 +323,29 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
 
   subroutine day14(file)
-    use day14_mod
+    use day14_mod, only : instruction_t, state_t, read_all_instructions, I8
     implicit none
     character(len=*), intent(in) :: file
     type(instruction_t), allocatable :: list(:)
     type(state_t) :: zx
     integer :: i
-    integer(I8) :: ans1
+    integer(I8) :: ans1, ans2
 
     call read_all_instructions(file, list)
+    call zx % init()
+
     do i = 1, size(list)
-      call zx % do_instruction(list(i))
+      call zx % doinstruction(list(i),1)
     end do
-    ans1 = zx % sum_memory()
+    ans1 = zx % summemory()
     print *, 'Answer 14/1 is ', ans1, ans1==165 .or. ans1==14839536808842_I8
+
+    call zx % clear()
+    do i = 1, size(list)
+      call zx % doinstruction(list(i),2)
+    end do
+    ans2 = zx % summemory()
+    print *, 'Answer 14/2 is ', ans2, ans2==208 .or. ans2==4215284199669_I8
   end subroutine day14
 
 
