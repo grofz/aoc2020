@@ -16,8 +16,11 @@
 
     !call day05('inp/05/input.txt')
 
-    call day06('inp/06/sample.txt')
-    call day06('inp/06/input.txt')
+    !call day06('inp/06/sample.txt')
+    !call day06('inp/06/input.txt')
+
+    call day07('inp/07/sample.txt')
+    call day07('inp/07/input.txt')
 
     !call day08('inp/08/sample.txt')
     !call day08('inp/08/input.txt')
@@ -200,6 +203,53 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print '("Answer day 06/2 is ",i0,1x,l1)', ans2, ans2==3427 .or. ans2==6
 
   end subroutine day06
+
+
+
+  subroutine day07(file)
+    use day07_mod
+    implicit none
+    character(len=*), intent(in) :: file
+
+    type(rule_t), allocatable :: rules_list(:)
+    type(color_t) :: mycolor
+    type(color_t), allocatable :: color_list(:)
+    integer :: ir, ic, nold, nfound, ans1, ans2
+    logical, allocatable :: rule_used(:)
+
+    call read_all_rules(file, rules_list)
+
+    ! Part One
+    ! - the list contains our bag color initially
+    ! - copy a color from rules if the rule contains a color on the list
+    ! - repeat until no additions to the list found
+    allocate(rule_used(size(rules_list)))
+    rule_used = .false.
+    call mycolor % set('shiny gold bag')
+    color_list = [mycolor]
+    do
+      nold = size(color_list)
+      do ir=1,size(rules_list)
+        if (rule_used(ir)) cycle
+        nfound = 0
+        do ic=1,size(color_list)
+          nfound = nfound + rules_list(ir)%findcolor(color_list(ic))
+        end do
+        if (nfound == 0) cycle
+        rule_used(ir) = .true.
+        color_list = [color_list, rules_list(ir)%base_color]
+      end do
+      if (size(color_list)==nold) exit
+    end do
+    ans1 = size(color_list)-1 ! exclude our bag color from the list
+    print *, 'Answer 7/1 is ', ans1, ans1==205 .or. ans1==4
+
+    ! Part Two
+    ir = index_color(rules_list, mycolor)
+    call count_nbags(ir, rules_list)
+    ans2 = rules_list(ir)%nbags
+    print *, 'Answer 7/2 is ', ans2, ans2==32 .or. ans2==80902
+  end subroutine day07
 
 
 
