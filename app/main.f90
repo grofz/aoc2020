@@ -28,11 +28,14 @@
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
 
-    call day14('inp/14/sample.txt')
-    call day14('inp/14/sample2.txt')
-    call day14('inp/14/input.txt')
+    !call day14('inp/14/sample.txt')
+    !call day14('inp/14/sample2.txt')
+    !call day14('inp/14/input.txt')
 
     !call day15()
+
+    call day20('inp/20/test.txt')
+    call day20('inp/20/input.txt')
 
     !call day24('inp/24/test.txt')
     !call day24('inp/24/input.txt')
@@ -367,6 +370,36 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       end do
       print *, 'Answer is : ', game % last_said
     end subroutine day15
+
+
+
+  subroutine day20(file)
+    use day20_mod
+    use kinds_m, only : I8 => I8B
+    implicit none
+    character(len=*), intent(in) :: file
+    type(puzzle_t) :: puzzle
+    integer :: corner_ids(4), i, ans2
+    integer(I8) :: ans1
+
+
+    call puzzle % read(file)
+    call puzzle % corner_tiles(corner_ids)
+    print '(a,*(i0,:,1x))', 'Corners = ', corner_ids
+    ans1 = 1_I8
+    do i=1,4
+      ans1 = ans1 * int(corner_ids(i), kind=I8)
+    end do
+    print *, 'Answer 20/1 is ', ans1, ans1==20899048083289_I8 .or. ans1==84116744709593_I8
+    print *
+
+    ! Part Two
+    call puzzle % solve(ans2)
+    call puzzle % print()
+    print *, 'Answer 20/2 is ', ans2, ans2==273 .or. ans2==1957
+    print *
+    print *
+  end subroutine day20
 
 
 
