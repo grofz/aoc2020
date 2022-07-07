@@ -25,8 +25,8 @@
     !call day08('inp/08/sample.txt')
     !call day08('inp/08/input.txt')
 
-    call day09('inp/09/input.txt', 25)
-    call day09('inp/09/sample.txt', 5)
+    !call day09('inp/09/input.txt', 25)
+    !call day09('inp/09/sample.txt', 5)
 
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
@@ -36,6 +36,11 @@
     !call day14('inp/14/input.txt')
 
     !call day15()
+
+    !call day19('inp/19/sample.txt')
+    call day19('inp/19/input.txt')
+    !call day19('inp/19/sample2.txt')
+    call day19('inp/19/input2.txt')
 
     !call day20('inp/20/test.txt')
     !call day20('inp/20/input.txt')
@@ -428,6 +433,33 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       end do
       print *, 'Answer is : ', game % last_said
     end subroutine day15
+
+
+
+  subroutine day19(file)
+    use day19_mod
+    implicit none
+    character(len=*), intent(in) :: file
+
+    integer, parameter :: REP = 500
+    type(rule_t), allocatable :: rules(:)
+    character(len=CODE_LEN), allocatable :: codes(:)
+    integer :: i, cnt, j
+    logical :: isok
+
+    call read_input(file, rules, codes)
+    cnt = 0
+    do i=1, size(codes)
+      do j=1,REP
+        isok = is_valid_code(codes(i), rules)
+        if (isok) exit
+      end do
+      if (isok) cnt = cnt + 1
+      !print *, '{'//trim(codes(i))//'}', isok
+    end do
+    print '("Answer day 19: ___",i0,"___  Ok part 1? ",l1"  Ok part 2? ",l1)', &
+        cnt, cnt==2 .or. cnt==111, cnt==343 .or. cnt==12
+  end subroutine day19
 
 
 

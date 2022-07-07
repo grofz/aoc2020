@@ -1,7 +1,7 @@
   module parse_mod
     implicit none
     private
-    public read_pattern
+    public read_pattern, chop_string
 
   contains
 
@@ -35,5 +35,22 @@
       end do
       aa = transpose(aa)
     end function read_pattern
+
+
+    subroutine chop_string(left, reg, right)
+      character(len=*), intent(inout) :: left
+      character(len=*), intent(in) :: reg
+      character(len=*), intent(out) :: right
+
+      integer :: i, n
+      i = scan(left, reg)
+      n = len(left)
+      if (i==0) then
+        right = ''
+      else
+        right = left(i+1:)
+        left = left(:i-1)
+      end if
+    end subroutine chop_string
 
   end module parse_mod
