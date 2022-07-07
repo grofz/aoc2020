@@ -37,10 +37,13 @@
 
     !call day15()
 
+    call day18('inp/18/sample.txt')
+    call day18('inp/18/input.txt')
+
     !call day19('inp/19/sample.txt')
-    call day19('inp/19/input.txt')
+    !call day19('inp/19/input.txt')
     !call day19('inp/19/sample2.txt')
-    call day19('inp/19/input2.txt')
+    !call day19('inp/19/input2.txt')
 
     !call day20('inp/20/test.txt')
     !call day20('inp/20/input.txt')
@@ -433,6 +436,29 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       end do
       print *, 'Answer is : ', game % last_said
     end subroutine day15
+
+
+
+  subroutine day18(file)
+    use day18_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    character(len=LINE_LEN), allocatable :: lines(:)
+    integer(I8), allocatable :: vals(:)
+    integer(I8) :: ans1
+    integer :: i
+
+    call read_input_lines(file, lines)
+    allocate(vals(size(lines)))
+    do i=1,size(lines)
+      vals(i) = evaluate_string(lines(i))
+      print *, trim(lines(i))
+      print '("Value = ",i0)', vals(i)
+    end do
+    ans1 = sum(vals)
+    print '("Answer 18/1 is ",i0,1x,l1)', ans1, ans1==31142189909908_I8
+    print *
+  end subroutine day18
 
 
 
