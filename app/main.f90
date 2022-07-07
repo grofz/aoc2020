@@ -25,6 +25,9 @@
     !call day08('inp/08/sample.txt')
     !call day08('inp/08/input.txt')
 
+    call day09('inp/09/input.txt', 25)
+    call day09('inp/09/sample.txt', 5)
+
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
 
@@ -34,8 +37,8 @@
 
     !call day15()
 
-    call day20('inp/20/test.txt')
-    call day20('inp/20/input.txt')
+    !call day20('inp/20/test.txt')
+    !call day20('inp/20/input.txt')
 
     !call day24('inp/24/test.txt')
     !call day24('inp/24/input.txt')
@@ -272,6 +275,61 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print '("Answer day 08/1 is ",i0,1x,l1)', ans1, ans1==5 .or. ans1==1446
     print '("Answer day 08/2 is ",i0,1x,l1)', ans2, ans2==8 .or. ans2==1403
   end subroutine day08
+
+
+
+  subroutine day09(file, preamble)
+    use day09_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    integer, intent(in) :: preamble
+
+    integer(I8B), allocatable :: arr(:)
+    integer(I8B) :: ans1, ans2, amin, amax
+    integer :: i, j, n
+    logical :: isvalid
+    type(interval_t) :: interval
+    real :: t0, t1
+
+    call cpu_time(t0)
+    call read_numbers(file, arr)
+    print '("Numbers in file ",i0)', size(arr)
+    print '("Buffer size ",i0)', preamble
+    do i=preamble+1, size(arr)
+      isvalid = is_num_valid(arr(i-preamble:i-1), arr(i))
+      if (.not. isvalid) exit
+    end do
+    ans1 = arr(i)
+    print '("Answer to 9/1 is ",i0,"   Valid? ",l1)', ans1, ans1==26796446 .or. ans1==127
+
+    ! Part Two
+    call interval % init(file, [1,1])
+    n = size(interval % arr)
+    OUT: do i=1, n-1
+      call interval % reset([i, i])
+      IN: do j=i+1, n
+        call interval % move(U_MARK,1)
+        if (interval % sum == ans1) exit OUT
+        if (interval % sum > ans1) exit IN
+      end do IN
+    end do OUT
+
+    if (interval%sum==ans1) then
+      print '("Interval found {",i0," ",i0,"}   Sum ",i0)', interval%marks, interval%sum
+      associate(set => interval%arr(interval%marks(L_MARK) : interval%marks(U_MARK)))
+        amin = minval(set)
+        amax = maxval(set)
+      end associate
+      print '("Min value ",i0," and max value ",i0)', amin, amax
+    else
+      error stop 'Search failed'
+    end if
+    ans2 = amin+amax
+    print '("Answer to 9/2 is ",i0,"   Valid? ",l1)', ans2, ans2==62 .or. ans2==3353494
+    call cpu_time(t1)
+    print '("Time taken ",f8.3," seconds")', t1-t0
+    print *
+  end subroutine day09
 
 
 
