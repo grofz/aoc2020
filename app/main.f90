@@ -28,6 +28,9 @@
     !call day09('inp/09/input.txt', 25)
     !call day09('inp/09/sample.txt', 5)
 
+    call day12('inp/12/sample.txt')
+    call day12('inp/12/input.txt')
+
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
 
@@ -37,8 +40,8 @@
 
     !call day15()
 
-    call day18('inp/18/sample.txt', 2)
-    call day18('inp/18/input.txt', 2)
+    !call day18('inp/18/input.txt', 1)
+    !call day18('inp/18/input.txt', 2)
 
     !call day19('inp/19/sample.txt')
     !call day19('inp/19/input.txt')
@@ -339,6 +342,35 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print *
   end subroutine day09
 
+! day10
+! day11
+
+  subroutine day12(file)
+    use day12_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    character(len=:), allocatable :: instructions(:)
+    type(ship_t), target :: ship
+    integer :: mand
+
+    call read_input_lines(file, instructions)
+    print '("Number of instructions ",i0)', size(instructions)
+
+    call ship % autopilot(instructions, 1)
+    print '("Ship position = [",i0,", ",i0,"]   heading = ",i0)', &
+      ship%ship, ship%heading
+    mand = sum(abs(ship%ship))
+    print '("Manhattan distance 1 = ",i0,1x,l1)', mand, mand==1603 .or. mand==25
+
+    call ship % reset()
+    call ship % autopilot(instructions, 2)
+    print '("Ship position = [",i0,", ",i0,"]   waypoint = [",i0,", ",i0,"]")', &
+      ship%ship, ship%wp
+    mand = sum(abs(ship%ship))
+    print '("Manhattan distance 2 = ",i0,1x,l1)', mand, mand==52866 .or. mand==286
+    print *
+  end subroutine day12
+
 
 
   subroutine day13(file)
@@ -437,7 +469,8 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       print *, 'Answer is : ', game % last_said
     end subroutine day15
 
-
+! day16
+! day17
 
   subroutine day18(file, mode)
     use day18_mod
@@ -520,7 +553,9 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print *
   end subroutine day20
 
-
+! day21
+! day22
+! day23
 
   subroutine day24(file)
     use day24_mod
