@@ -37,8 +37,8 @@
 
     !call day15()
 
-    call day18('inp/18/sample.txt')
-    call day18('inp/18/input.txt')
+    call day18('inp/18/sample.txt', 2)
+    call day18('inp/18/input.txt', 2)
 
     !call day19('inp/19/sample.txt')
     !call day19('inp/19/input.txt')
@@ -439,24 +439,27 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
 
 
-  subroutine day18(file)
+  subroutine day18(file, mode)
     use day18_mod
     implicit none
     character(len=*), intent(in) :: file
+    integer, intent(in) :: mode
     character(len=LINE_LEN), allocatable :: lines(:)
     integer(I8), allocatable :: vals(:)
-    integer(I8) :: ans1
+    integer(I8) :: ans
     integer :: i
 
     call read_input_lines(file, lines)
     allocate(vals(size(lines)))
     do i=1,size(lines)
-      vals(i) = evaluate_string(lines(i))
+      vals(i) = evaluate_string(lines(i), mode)
       print *, trim(lines(i))
       print '("Value = ",i0)', vals(i)
     end do
-    ans1 = sum(vals)
-    print '("Answer 18/1 is ",i0,1x,l1)', ans1, ans1==31142189909908_I8
+    ans = sum(vals)
+    print '("Answer 18/",i0," is ",i0,1x,l1)', mode, ans, &
+        (mode==1 .and. ans==31142189909908_I8) .or. &
+        (mode==2 .and. ans==323912478287549_I8)
     print *
   end subroutine day18
 
