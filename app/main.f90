@@ -29,8 +29,8 @@
     !call day09('inp/09/sample.txt', 5)
 
     !call day11('inp/11/sample.txt',2)
-    call day11('inp/11/input.txt',1)
-    call day11('inp/11/input.txt',2)
+    !call day11('inp/11/input.txt',1)
+    !call day11('inp/11/input.txt',2)
 
     !call day12('inp/12/sample.txt')
     !call day12('inp/12/input.txt')
@@ -43,6 +43,11 @@
     !call day14('inp/14/input.txt')
 
     !call day15()
+
+    call day17('inp/17/sample.txt',1)
+    call day17('inp/17/sample.txt',2)
+    call day17('inp/17/input.txt',1)
+    call day17('inp/17/input.txt',2)
 
     !call day18('inp/18/input.txt', 1)
     !call day18('inp/18/input.txt', 2)
@@ -495,7 +500,29 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     end subroutine day15
 
 ! day16
-! day17
+
+  subroutine day17(file, mode)
+    use day17_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    integer, intent(in) :: mode
+    type(conway_t) :: cw
+    integer :: ans, i
+
+    cw = conway_t(file)
+    call cw % print()
+    do i = 1, 6
+      call cw % cycle(mode)
+      !call cw % print()
+    end do
+    ans = count(cw % cube)
+    print '("Active cubes ",i0,l1)', ans, &
+      (mode==1 .and. (ans==112 .or. ans==348)) .or. &
+      (mode==2 .and. (ans==848 .or. ans==2236))
+    print *
+  end subroutine day17
+
+
 
   subroutine day18(file, mode)
     use day18_mod
