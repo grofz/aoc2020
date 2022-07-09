@@ -60,8 +60,12 @@
     !call day20('inp/20/test.txt')
     !call day20('inp/20/input.txt')
 
-    call day22('inp/22/sample.txt')
-    call day22('inp/22/input.txt')
+    !call day22('inp/22/sample.txt')
+    !call day22('inp/22/input.txt')
+
+    call day23('389125467') ! test case
+    call day23('318946572') ! live puzzle
+
     !call day24('inp/24/test.txt')
     !call day24('inp/24/input.txt')
 
@@ -636,7 +640,25 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print '(l1,a,f8.3)', score==36463 .or. score==291,"    Time taken ",t1-t0
   end subroutine day22
 
-! day23
+
+
+  subroutine day23(input)
+    use day23_mod
+    implicit none
+    character(len=*), intent(in) :: input
+    type(circle_t) :: cups
+    integer :: i
+
+    cups = circle_t(input)
+    do i=1,100
+      call cups % move()
+    end do
+    print *, 'Final state'
+    call cups % print()
+
+  end subroutine day23
+
+
 
   subroutine day24(file)
     use day24_mod
