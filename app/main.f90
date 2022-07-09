@@ -28,8 +28,12 @@
     !call day09('inp/09/input.txt', 25)
     !call day09('inp/09/sample.txt', 5)
 
-    call day12('inp/12/sample.txt')
-    call day12('inp/12/input.txt')
+    !call day11('inp/11/sample.txt',2)
+    call day11('inp/11/input.txt',1)
+    call day11('inp/11/input.txt',2)
+
+    !call day12('inp/12/sample.txt')
+    !call day12('inp/12/input.txt')
 
     !call day13('inp/13/test.txt')
     !call day13('inp/13/input.txt')
@@ -343,7 +347,28 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
   end subroutine day09
 
 ! day10
-! day11
+
+  subroutine day11(file, mode)
+    use day11_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    integer, intent(in) :: mode
+    type(seatplan_t) :: sp
+    integer :: nswaps, ans
+
+    sp = seatplan_t(file, mode)
+    do
+      !call sp % print()
+      call sp % onestep(nswaps)
+      !print '("Swaps ",i0,"   Occupied seats ",i0)', nswaps, count(sp%plan==OCCUPIED_SEAT)
+      if (nswaps==0) exit
+    end do
+    ans = count(sp%plan==OCCUPIED_SEAT)
+    print '("Answer 11/",i0," is ",i0,1x,l1)', mode, ans, &
+      (mode==1 .and. (ans==2494 .or. ans==37)) .or. (mode==2 .and. (ans==2306 .or. ans==26))
+  end subroutine day11
+
+
 
   subroutine day12(file)
     use day12_mod
