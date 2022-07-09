@@ -644,17 +644,38 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
   subroutine day23(input)
     use day23_mod
+    use kinds_m, only : I8B
     implicit none
     character(len=*), intent(in) :: input
-    type(circle_t) :: cups
+    type(circle_t) :: cups1, cups2
     integer :: i
+    type(cup_t), pointer :: ca, cb
+    integer(I8B) :: mult
+    real :: t0, t1
 
-    cups = circle_t(input)
+    call cpu_time(t0)
+    cups1 = circle_t(input,9)
     do i=1,100
-      call cups % move()
+      call cups1 % move()
     end do
-    print *, 'Final state'
-    call cups % print()
+    print '(a)', 'Final state - part 1'
+    call cups1 % print()
+
+    ! Part 2
+    cups2 = circle_t(input, 1000000)
+    do i=1,10000000
+      call cups2 % move()
+    end do
+
+    ca => cups2 % cups(1)%ptr%next
+    cb => ca % next
+    mult = int(ca%id,kind=I8B) * int(cb%id, kind=I8B)
+    print '(/a)', 'Simulation complete for part 2'
+    print '("Numbers behind 1 are ",i0," * ",i0," = ",i0)',ca%id, cb%id, mult
+    print '("Valid? ", l1)', 11591415792_I8B==mult .or. 149245887792_I8B==mult
+    call cpu_time(t1)
+    print '("Time taken ",f8.3," seconds.")', t1-t0
+    print *
 
   end subroutine day23
 

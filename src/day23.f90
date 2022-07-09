@@ -1,7 +1,8 @@
   module day23_mod
     implicit none
 
-    integer, parameter :: NO_OF_CUPS=9
+    !integer, parameter :: NO_OF_CUPS=9
+
     type cup_t
       logical :: is_on = .true.
       integer :: id = -1
@@ -13,12 +14,12 @@
 
     type circle_t
       type(cup_t), pointer :: current => null()
-      type(cup_ptr) :: cups(NO_OF_CUPS)
+      type(cup_ptr), allocatable :: cups(:)
+      integer :: ncups
     contains
       procedure :: print => circle_print
       procedure :: destination => circle_destination
       procedure :: move => circle_move
-      !procedure :: isvalid => circle_isvalid
       final :: circle_finalize
     end type circle_t
     interface circle_t
@@ -98,27 +99,40 @@
       if (.not. associated(this%current)) error stop 'circle_destination - no current'
       cup_id = this % current % id
       do
-        cup_id = ind_prev(cup_id)
+        cup_id = ind_prev(cup_id, this%ncups)
         if (this%cups(cup_id)%ptr%is_on) exit
       end do
     end function circle_destination
 
 
-    type(circle_t) function circle_new(str) result(this)
+    type(circle_t) function circle_new(str, ncups) result(this)
       character(len=*), intent(in) :: str
-      integer :: i, cups_id(NO_OF_CUPS), cup0, cup1
+      integer, intent(in) :: ncups
+      integer :: i, cup0, cup1
+      integer, allocatable :: cups_id(:)
 
-      do i = 1, NO_OF_CUPS
+      ! Read labels from the string and complete remaining ones
+      allocate(cups_id(ncups))
+      do i=1,len_trim(str)
+        read(str(i:i),*) cups_id(i)
+      end do
+      do i=len_trim(str)+1, ncups
+        cups_id(i) = i
+      end do
+
+      ! Allocate cups and label them
+      this % ncups = ncups
+      allocate(this%cups(ncups))
+      do i = 1, this%ncups
         allocate(this % cups(i)%ptr)
         this % cups(i)%ptr % id = i
-        read(str(i:i),*) cups_id(i)
       end do
       this % current => this % cups(cups_id(1))%ptr
 
-      ! make a chain of cups
-      do i=1, NO_OF_CUPS
+      ! Form chain of cups
+      do i=1, this%ncups
         cup1 = cups_id(i)
-        cup0 = cups_id(ind_prev(i))
+        cup0 = cups_id(ind_prev(i,this%ncups))
         this % cups(cup0)%ptr % next => this % cups(cup1)%ptr
       end do
     end function circle_new
@@ -127,7 +141,7 @@
     subroutine circle_finalize(this)
       type(circle_t), intent(inout) :: this
       integer :: i
-      do i=1,NO_OF_CUPS
+      do i=1,this%ncups
         if (associated(this%cups(i)%ptr)) deallocate(this%cups(i)%ptr)
       end do
       nullify(this%current)
@@ -136,16 +150,20 @@
 
     subroutine circle_print(this)
       class(circle_t), intent(in) :: this
+      integer, parameter :: MAX_PRINT=10
       integer :: i
       type(cup_t), pointer :: cup
       cup => this % current
-      do i=1,NO_OF_CUPS
+      do i=1,min(this%ncups, MAX_PRINT)
         if (.not. associated(cup)) exit
-        !write(*,'(i1,l1,1x)',advance='no') cup % id, cup % is_on
-        write(*,'(i1,1x)',advance='no') cup % id
+        if (this%ncups > MAX_PRINT) then
+          write(*,'(i6,1x)',advance='no') cup % id
+        else
+          write(*,'(i1,1x)',advance='no') cup % id
+        end if
         cup => cup % next
       end do
-      if (i /= NO_OF_CUPS+1) then
+      if (i /= min(this%ncups, MAX_PRINT)+1) then
         write(*,'(a)') " - and chain is incomplete"
       else
         write(*,*)
@@ -155,14 +173,14 @@
 !
 ! Helper functions to move between 1, 2, 3, 4, ..., 9, 1, 2 in the circle
 !
-    integer function ind_next(ind)
-      integer, intent(in) :: ind
-      ind_next = mod(ind, NO_OF_CUPS)+1
+    integer function ind_next(ind, n)
+      integer, intent(in) :: ind, n
+      ind_next = mod(ind, n)+1
     end function ind_next
 
-    integer function ind_prev(ind)
-      integer, intent(in) :: ind
-      ind_prev = NO_OF_CUPS - mod(NO_OF_CUPS-ind+1, NO_OF_CUPS)
+    integer function ind_prev(ind, n)
+      integer, intent(in) :: ind, n
+      ind_prev = n - mod(n-ind+1, n)
     end function ind_prev
 
   end module day23_mod
