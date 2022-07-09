@@ -44,10 +44,10 @@
 
     !call day15()
 
-    call day17('inp/17/sample.txt',1)
-    call day17('inp/17/sample.txt',2)
-    call day17('inp/17/input.txt',1)
-    call day17('inp/17/input.txt',2)
+    !call day17('inp/17/sample.txt',1)
+    !call day17('inp/17/sample.txt',2)
+    !call day17('inp/17/input.txt',1)
+    !call day17('inp/17/input.txt',2)
 
     !call day18('inp/18/input.txt', 1)
     !call day18('inp/18/input.txt', 2)
@@ -60,6 +60,8 @@
     !call day20('inp/20/test.txt')
     !call day20('inp/20/input.txt')
 
+    call day22('inp/22/sample.txt')
+    call day22('inp/22/input.txt')
     !call day24('inp/24/test.txt')
     !call day24('inp/24/input.txt')
 
@@ -606,7 +608,34 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
   end subroutine day20
 
 ! day21
-! day22
+
+  subroutine day22(file)
+    use day22_mod
+    implicit none
+    character(len=*), intent(in) :: file
+    type(game_t) :: g
+    integer :: game_winner, score
+    real :: t0, t1
+
+    ! Part One
+    g = game_t(file)
+    call cpu_time(t0)
+    call g % play_game(game_winner, .false.)
+    score = g%score(game_winner)
+    call cpu_time(t1)
+    print '("Winner is ",i0," with score ",i0)', game_winner, score
+    print '(l1,a,f8.3)', score==32472 .or. score==306, "    Time taken ",t1-t0
+
+    ! Part Two - Recursive combat
+    g = game_t(file)
+    call cpu_time(t0)
+    call g % play_game(game_winner, .true.)
+    score = g%score(game_winner)
+    call cpu_time(t1)
+    print '("Winner is ",i0," with score ",i0)', game_winner, score
+    print '(l1,a,f8.3)', score==36463 .or. score==291,"    Time taken ",t1-t0
+  end subroutine day22
+
 ! day23
 
   subroutine day24(file)
