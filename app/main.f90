@@ -28,7 +28,7 @@
     !call day09('inp/09/input.txt', 25)
     !call day09('inp/09/sample.txt', 5)
 
-    call day10('inp/10/input.txt')
+    !call day10('inp/10/input.txt')
     !call day10('inp/10/sample.txt')
 
     !call day11('inp/11/sample.txt',2)
@@ -46,6 +46,9 @@
     !call day14('inp/14/input.txt')
 
     !call day15()
+
+    !call day16('inp/16/sample2.txt')
+    call day16('inp/16/input.txt')
 
     !call day17('inp/17/sample.txt',1)
     !call day17('inp/17/sample.txt',2)
@@ -399,7 +402,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       nvalid = count_valid_combinations(bb, DIF(2))
       ans2 = ans2 * nvalid
       print '("Valid ",i2," out of ",i2," in chain of ",*(i3,1x))', &
-          nvalid, 2**(size(bb)-2), bb      
+          nvalid, 2**(size(bb)-2), bb
     end do
     print '("Answer 10/2 is ",i0,1x,l1)', ans2, ans2==19208 .or. ans2==1511207993344_I8B
   end subroutine day10
@@ -552,7 +555,54 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       print *, 'Answer is : ', game % last_said
     end subroutine day15
 
-! day16
+
+
+  subroutine day16(file)
+    use day16_mod
+    use kinds_m, only : I8B
+    implicit none
+    character(len=*), intent(in) :: file
+!
+! DAY 16 - TICKET TRANSLATION
+!
+    type(field_t), allocatable :: fields(:)
+    type(ticket_t) :: myticket
+    type(ticket_t), allocatable :: all_tickets(:), val_tickets(:)
+    integer :: i, ans1, val
+    integer(I8B) :: ans2
+
+    call read_from_file(file, fields, myticket, all_tickets)
+    print '("No of fields = ",i0,"   No of tickets = ",i0)', size(fields), size(all_tickets)
+    print '("My ",*(i3,1x))', myticket%aa
+
+    ! Part 1
+    ans1 = 0
+    allocate(val_tickets(0))
+    do i=1,size(all_tickets)
+      !val = report_invalid_item(all_tickets(i), fields)
+      val = all_tickets(i) % get_invalid(fields)
+      if (val /= -1) ans1 = ans1 + val
+      if (val == -1) val_tickets = [val_tickets, all_tickets(i)]
+    end do
+    print '("Answer 16/1 is ",i0,1x,l1)', ans1, 29759==ans1
+    print '("No of valid tickets remaining ",i0)', size(val_tickets)
+
+    ! Part 2
+    val_tickets = [val_tickets, myticket] ! including own ticket is otional
+    call make_maybe_pos(fields, val_tickets)
+    call eliminate_unknown_fields(fields)
+    ans2 = 1_I8B
+    do i=1,size(fields)
+      if (fields(i)%label(1:9)/='departure') cycle
+      val = myticket%aa(fields(i)%pos)
+      ans2 = ans2 * val
+      print '(a20,1x,*(i3,1x))', fields(i)%label, fields(i)%pos, val
+    end do
+    print '("Answer 16/2 is ",i0,1x,l1)', ans2, 1307550234719_I8B==ans2
+    print *
+  end subroutine day16
+
+
 
   subroutine day17(file, mode)
     use day17_mod
