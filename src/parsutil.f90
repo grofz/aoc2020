@@ -1,9 +1,35 @@
   module parse_mod
     implicit none
     private
-    public read_pattern, chop_string
+    public read_pattern, chop_string, read_numbers
 
   contains
+
+    function read_numbers(file) result(a)
+      character(len=*), intent(in) :: file
+      integer, allocatable :: a(:)
+!
+! Read from file with a single integer on every line
+!
+      integer :: fid, n, i, ios
+
+      ! count lines first...
+      open(newunit=fid, file=file, status='old')
+      n = 0
+      do
+        read(fid,*,iostat=ios) i
+        if (ios /= 0) exit
+        n = n + 1
+      end do
+
+      ! ...then re-read and store to "a"
+      allocate(a(n))
+      rewind(fid)
+      do i=1, n
+        read(fid,*) a(i)
+      end do
+      close(fid)
+    end function
 
     function read_pattern(file) result(aa)
       character(len=*), intent(in) :: file

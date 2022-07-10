@@ -28,6 +28,9 @@
     !call day09('inp/09/input.txt', 25)
     !call day09('inp/09/sample.txt', 5)
 
+    call day10('inp/10/input.txt')
+    !call day10('inp/10/sample.txt')
+
     !call day11('inp/11/sample.txt',2)
     !call day11('inp/11/input.txt',1)
     !call day11('inp/11/input.txt',2)
@@ -63,8 +66,8 @@
     !call day22('inp/22/sample.txt')
     !call day22('inp/22/input.txt')
 
-    call day23('389125467') ! test case
-    call day23('318946572') ! live puzzle
+    !call day23('389125467') ! test case
+    !call day23('318946572') ! live puzzle
 
     !call day24('inp/24/test.txt')
     !call day24('inp/24/input.txt')
@@ -77,6 +80,7 @@
 
   subroutine day01(file)
     use day01_mod
+    use parse_mod, only : read_from_file => read_numbers
     implicit none
     character(len=*), intent(in) :: file
 
@@ -357,7 +361,50 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print *
   end subroutine day09
 
-! day10
+
+
+  subroutine day10(file)
+    use day10_mod
+    use parse_mod, only : read_numbers
+    use quicksort_module, only : quicksort
+    use kinds_m, only : I8B
+    implicit none
+    character(len=*), intent(in) :: file
+!
+! DAY!) - ADAPTER ARRAY
+!
+    integer, allocatable :: aa(:), bb(:)
+    logical, allocatable :: essential(:)
+    integer, parameter :: NDIF = 2, DIF(NDIF) = [1, 3]
+    integer :: cnt_dif(NDIF), ans1, ipos, nvalid
+    integer(I8B) :: ans2
+
+    aa = read_numbers(file)
+    aa = [aa, 0, maxval(aa)+3]
+    call quicksort(aa)
+    cnt_dif = count_dif(aa, DIF)
+    ans1 = cnt_dif(1)*cnt_dif(2)
+
+    print '(10(i3,1x))', aa
+    print '(10(i3,1x))', cnt_dif
+    print '("Answer 10/1 is ",i0,1x,l1)', ans1, ans1==220 .or. ans1==1920
+
+    ! Part Two
+    essential = mark_essential(aa, DIF(2))
+    ipos = 1
+    ans2 = 1_I8B
+    do
+      call extract_chain(aa, essential, ipos, bb)
+      if (size(bb)==0) exit
+      nvalid = count_valid_combinations(bb, DIF(2))
+      ans2 = ans2 * nvalid
+      print '("Valid ",i2," out of ",i2," in chain of ",*(i3,1x))', &
+          nvalid, 2**(size(bb)-2), bb      
+    end do
+    print '("Answer 10/2 is ",i0,1x,l1)', ans2, ans2==19208 .or. ans2==1511207993344_I8B
+  end subroutine day10
+
+
 
   subroutine day11(file, mode)
     use day11_mod

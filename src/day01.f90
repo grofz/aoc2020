@@ -2,32 +2,10 @@
     use quicksort_module, only : quicksort
     implicit none
     private
-    public read_from_file, quicksort, find_entries, find_three_entries
+    public quicksort, find_entries, find_three_entries
 
   contains
-    function read_from_file(file) result(a)
-      character(len=*), intent(in) :: file
-      integer, allocatable :: a(:)
 
-      integer :: fid, n, i, ios
-
-      ! count lines first...
-      open(newunit=fid, file=file, status='old')
-      n = 0
-      do
-        read(fid,*,iostat=ios) i
-        if (ios /= 0) exit
-        n = n + 1
-      end do
-
-      ! ...then re-read and store to "a"
-      allocate(a(n))
-      rewind(fid)
-      do i=1, n
-        read(fid,*) a(i)
-      end do
-      close(fid)
-    end function
 
 
     pure function find_entries(a, whatsum) result (entries)
