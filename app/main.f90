@@ -48,7 +48,7 @@
     !call day15()
 
     !call day16('inp/16/sample2.txt')
-    call day16('inp/16/input.txt')
+    !call day16('inp/16/input.txt')
 
     !call day17('inp/17/sample.txt',1)
     !call day17('inp/17/sample.txt',2)
@@ -65,6 +65,9 @@
 
     !call day20('inp/20/test.txt')
     !call day20('inp/20/input.txt')
+
+    !call day21('inp/21/sample.txt')
+    call day21('inp/21/input.txt')
 
     !call day22('inp/22/sample.txt')
     !call day22('inp/22/input.txt')
@@ -708,7 +711,55 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print *
   end subroutine day20
 
-! day21
+
+
+  subroutine day21(file)
+    use day21_mod
+    use list_mod, only : list_t
+    implicit none
+    character(len=*), intent(in) :: file
+    type(food_t), allocatable :: foods(:)
+    type(list_t) :: ingredients, allergens, unsafe
+    integer :: i, j, ans1
+
+    call read_from_file(file, foods)
+    print '("No of foods ",i0)', size(foods)
+
+    ! Identify which ingredient is associated with each allergen
+    call make_lists(foods, ingredients, allergens, unsafe)
+
+    print '("List of all ingredients")'
+    print '("=======================")'
+    print *, ingredients%print()
+    print '("Total ingredients ",i0)', ingredients%size()
+    print *
+    print '("List of unsafe ingredients")'
+    print '("==========================")'
+    print *, unsafe%print()
+    print '("Unsafe ingredients ",i0)', unsafe%size()
+    print *
+    print '("List of all allergens")'
+    print '("=====================")'
+    print *, allergens%print()
+    print '("Total allergens ",i0)', allergens%size()
+    print *
+
+    ans1 = count_safe_ingredients(foods, unsafe)
+    print '("Answer 21/1 is ",i0,l2)', ans1, ans1==5 .or. ans1==2428
+    print *
+
+
+    ! Part 2 - just sort the list
+    call allergens % sort(unsafe)
+    print '("List of all allergens/unsafe ingredients (sorted)")'
+    print '("=================================================")'
+    print '(a)', allergens%print()
+    print '(a)', unsafe%print(',')
+    print '(l1)', unsafe%print(',')=='bjq,jznhvh,klplr,dtvhzt,sbzd,tlgjzx,ctmbr,kqms'
+    print *
+  end subroutine day21
+
+
 
   subroutine day22(file)
     use day22_mod

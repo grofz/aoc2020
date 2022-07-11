@@ -1,7 +1,7 @@
   module parse_mod
     implicit none
     private
-    public read_pattern, chop_string, read_numbers
+    public read_pattern, chop_string, read_numbers, parse_array
 
   contains
 
@@ -30,6 +30,8 @@
       end do
       close(fid)
     end function
+
+
 
     function read_pattern(file) result(aa)
       character(len=*), intent(in) :: file
@@ -63,11 +65,14 @@
     end function read_pattern
 
 
+
     subroutine chop_string(left, reg, right)
       character(len=*), intent(inout) :: left
       character(len=*), intent(in) :: reg
       character(len=*), intent(out) :: right
-
+!
+! Chop string in two at "reg"-character: returns left and right part, "reg" character is discarded
+!
       integer :: i, n
       i = scan(left, reg)
       n = len(left)
@@ -78,5 +83,39 @@
         left = left(:i-1)
       end if
     end subroutine chop_string
+
+
+
+    function parse_array(line, delim, nlen) result(arr)
+      character(len=*), intent(in) :: line
+      character(len=1), intent(in) :: delim
+      integer, intent(in) :: nlen
+      character(len=nlen), allocatable :: arr(:)
+!
+! ???
+!
+      character(len=len(line)) :: line0
+      character(len=nlen), allocatable :: wrk(:)
+      character(len=len(line)) :: a1, a2
+      integer, parameter :: MAX_ITEMS=100
+      integer :: nitems
+
+      allocate(wrk(MAX_ITEMS))
+      nitems=0
+      line0 = line
+      do
+        call chop_string(line0, delim, a2)
+        if (len_trim(line0) == 0) exit
+        a1 = adjustl(line0)
+        nitems = nitems+1
+        wrk(nitems) = a1
+
+        if(len_trim(a2)==0) exit
+        line0 = adjustl(a2)
+      end do
+
+      allocate(arr(nitems))
+      arr = wrk(1:nitems)
+    end function parse_array
 
   end module parse_mod
