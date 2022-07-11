@@ -29,6 +29,7 @@ contains
     do i=1,n
       read(fid,'(a)') lines(i)
     end do
+    close(fid)
   end subroutine read_input_lines
 
 

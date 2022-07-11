@@ -1,85 +1,87 @@
   program main
     implicit none
+    goto 15
 
-    !call day01('inp/01/input.txt')
+01  call day01('inp/01/input.txt')
     !call day01('inp/01/sample.txt')
 
-    !call day02('inp/02/input.txt')
+02  call day02('inp/02/input.txt')
     !call day02('inp/02/sample.txt')
 
-    !call day03('inp/03/input.txt')
+03  call day03('inp/03/input.txt')
     !call day03('inp/03/sample.txt')
 
+04  call day04('inp/04/input.txt')
     !call day04('inp/04/sample.txt')
     !call day04('inp/04/sample3.txt')
-    !call day04('inp/04/input.txt')
 
-    !call day05('inp/05/input.txt')
+05  call day05('inp/05/input.txt')
 
+06  call day06('inp/06/input.txt')
     !call day06('inp/06/sample.txt')
-    !call day06('inp/06/input.txt')
 
+07  call day07('inp/07/input.txt')
     !call day07('inp/07/sample.txt')
-    !call day07('inp/07/input.txt')
 
+08  call day08('inp/08/input.txt')
     !call day08('inp/08/sample.txt')
-    !call day08('inp/08/input.txt')
 
-    !call day09('inp/09/input.txt', 25)
+09  call day09('inp/09/input.txt', 25)
     !call day09('inp/09/sample.txt', 5)
 
-    !call day10('inp/10/input.txt')
+10  call day10('inp/10/input.txt')
     !call day10('inp/10/sample.txt')
 
+11  call day11('inp/11/input.txt',1)
+    call day11('inp/11/input.txt',2)
     !call day11('inp/11/sample.txt',2)
-    !call day11('inp/11/input.txt',1)
-    !call day11('inp/11/input.txt',2)
 
+12  call day12('inp/12/input.txt')
     !call day12('inp/12/sample.txt')
-    !call day12('inp/12/input.txt')
 
+13  call day13('inp/13/input.txt')
     !call day13('inp/13/test.txt')
-    !call day13('inp/13/input.txt')
 
+14  call day14('inp/14/input.txt')
     !call day14('inp/14/sample.txt')
     !call day14('inp/14/sample2.txt')
-    !call day14('inp/14/input.txt')
 
-    !call day15()
+15  call day15()
+stop
 
+16  call day16('inp/16/input.txt')
     !call day16('inp/16/sample2.txt')
-    !call day16('inp/16/input.txt')
 
+17  call day17('inp/17/input.txt',1)
+    call day17('inp/17/input.txt',2)
     !call day17('inp/17/sample.txt',1)
     !call day17('inp/17/sample.txt',2)
-    !call day17('inp/17/input.txt',1)
-    !call day17('inp/17/input.txt',2)
 
-    !call day18('inp/18/input.txt', 1)
-    !call day18('inp/18/input.txt', 2)
+18  call day18('inp/18/input.txt', 1)
+    call day18('inp/18/input.txt', 2)
 
+19  call day19('inp/19/input.txt')
+    call day19('inp/19/input2.txt')
     !call day19('inp/19/sample.txt')
-    !call day19('inp/19/input.txt')
     !call day19('inp/19/sample2.txt')
-    !call day19('inp/19/input2.txt')
 
+20  call day20('inp/20/input.txt')
     !call day20('inp/20/test.txt')
-    !call day20('inp/20/input.txt')
 
+21  call day21('inp/21/input.txt')
     !call day21('inp/21/sample.txt')
-    call day21('inp/21/input.txt')
 
+22  call day22('inp/22/input.txt')
     !call day22('inp/22/sample.txt')
-    !call day22('inp/22/input.txt')
 
+23  call day23('318946572') ! live puzzle
     !call day23('389125467') ! test case
-    !call day23('318946572') ! live puzzle
 
+24  call day24('inp/24/input.txt')
     !call day24('inp/24/test.txt')
-    !call day24('inp/24/input.txt')
 
+25  call day25('inp/25/input.txt')
     !call day25('inp/25/test.txt')
-    !call day25('inp/25/input.txt')
   end program main
 
 
@@ -101,12 +103,12 @@
     enta = find_entries(a, SUM_TO_FIND)
     ans = enta(1)*enta(2)
     print '(i0,1x,i0)', enta
-    print '("Answer day01 part 1 = ",i0,1x,l1)', ans, ans==514579 .or. ans==744475
+    print '("Answer 1/1 = ",i0,1x,l1)', ans, ans==514579 .or. ans==744475
 
     entb = find_three_entries(a, SUM_TO_FIND)
     ans = entb(1)*entb(2)*entb(3)
     print '(i0,1x,i0,1x,i0)', entb
-    print '("Answer day01 part 2 = ",i0,1x,l1)', ans, ans==241861950 .or. ans==70276940
+    print '("Answer 1/2 = ",i0,1x,l1)', ans, ans==241861950 .or. ans==70276940
     call cpu_time(t1)
     print '("Time spent = ",f12.4," seconds")', t1-t0
   end subroutine day01
@@ -133,8 +135,8 @@
       if (pas % isvalid_b()) valid_b = valid_b + 1
     end do
 
-    print '("Answer day02 part 1 = ",i0,1x,l1)', valid, valid==2 .or. valid==600
-    print '("Answer day02 part 2 = ",i0,1x,l1)', valid_b, valid_b==1 .or. valid_b==245
+    print '("Answer 2/1 = ",i0,1x,l1)', valid, valid==2 .or. valid==600
+    print '("Answer 2/2 = ",i0,1x,l1)', valid_b, valid_b==1 .or. valid_b==245
   end subroutine day02
 
 
@@ -167,8 +169,8 @@
       mlt = mlt * int(cnt(i), kind=I8)
     end do
 
-    print '("Answer day02 part 1 = ",i0,1x,l1)', cnt(2), cnt(2)==7 .or. cnt(2)==173
-    print '("Answer day02 part 2 = ",i0,1x,l1)', mlt, mlt==336 .or. mlt==4385176320_I8
+    print '("Answer 3/1 = ",i0,1x,l1)', cnt(2), cnt(2)==7 .or. cnt(2)==173
+    print '("Answer 3/2 = ",i0,1x,l1)', mlt, mlt==336 .or. mlt==4385176320_I8
   end subroutine day03
 
 
@@ -197,8 +199,8 @@
       if (pas % is_valid()) nvalid2 = nvalid2 + 1
  print *
     end do
-    print '("Answer day04 part 1 = ",i0,1x,l1)', nvalid, nvalid==2 .or. nvalid==219
-    print '("Answer day04 part 2 = ",i0,1x,l1)', nvalid2, nvalid2==127
+    print '("Answer 4/1 = ",i0,1x,l1)', nvalid, nvalid==2 .or. nvalid==219
+    print '("Answer 4/2 = ",i0,1x,l1)', nvalid2, nvalid2==127
   end subroutine day04
 
 
@@ -223,8 +225,8 @@
       end if
       next_id = bps(i)%id + 1
     end do
-    print '("Answer to day 5/1 is ",i0,1x,l1)', max_id, max_id==820 .or. max_id==801
-    print '("Answer to day 5/2 is ",i0,1x,l1)', missing_id, missing_id==597
+    print '("Answer 5/1 is ",i0,1x,l1)', max_id, max_id==820 .or. max_id==801
+    print '("Answer 5/2 is ",i0,1x,l1)', missing_id, missing_id==597
   end subroutine day05
 
 
@@ -245,9 +247,8 @@
       ans2 = ans2 + count(forms2(i)%ans)
 print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     end do
-    print '("Answer day 06/1 is ",i0,1x,l1)', ans1, ans1==6532 .or. ans1==11
-    print '("Answer day 06/2 is ",i0,1x,l1)', ans2, ans2==3427 .or. ans2==6
-
+    print '("Answer 6/1 is ",i0,1x,l1)', ans1, ans1==6532 .or. ans1==11
+    print '("Answer 6/2 is ",i0,1x,l1)', ans2, ans2==3427 .or. ans2==6
   end subroutine day06
 
 
@@ -308,8 +309,8 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     call zx % load_program(file)
     call zx % run_program(iexit, ans1)
     call zx % find_working_program(ans2)
-    print '("Answer day 08/1 is ",i0,1x,l1)', ans1, ans1==5 .or. ans1==1446
-    print '("Answer day 08/2 is ",i0,1x,l1)', ans2, ans2==8 .or. ans2==1403
+    print '("Answer 8/1 is ",i0,1x,l1)', ans1, ans1==5 .or. ans1==1446
+    print '("Answer 8/2 is ",i0,1x,l1)', ans2, ans2==8 .or. ans2==1403
   end subroutine day08
 
 
@@ -443,6 +444,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     integer :: mand
 
     call read_input_lines(file, instructions)
+    print '("Day 12")'
     print '("Number of instructions ",i0)', size(instructions)
 
     call ship % autopilot(instructions, 1)
@@ -492,7 +494,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       end if
     end do
     print '("tnext= ",i0,"  by id ",i0,"  in ",i0)', tmin, idmin, tmin-tnow
-    print *, 'Answer is ', idmin*(tmin-tnow), idmin*(tmin-tnow)==222
+    print *, 'Answer 13/1 is ', idmin*(tmin-tnow), idmin*(tmin-tnow)==222
 
     time = 0
     mp = arr(1)
@@ -507,7 +509,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       print '(i4,1x,i4,1x,i18)', arr(i), i-1, time
     end do
     print *
-    print *, 'Answer is ', time, time==408270049879073_I8 .or. time==1068781_I8
+    print *, 'Answer 13/2 is ', time, time==408270049879073_I8 .or. time==1068781_I8
   end subroutine day13
 
 
@@ -540,23 +542,39 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
 
 
-    subroutine day15()
-      use day15_mod
-      implicit none
-      type(game_t) :: game
-      !integer, parameter :: START(*) = [3, 1, 2]
-      integer, parameter :: START(*) = [0,5,4,1,10,14,7]
-      integer :: i, number
+  subroutine day15()
+    use day15_mod
+    implicit none
+    type(game_t) :: game
+    !integer, parameter :: START(*) = [3, 1, 2]
+    integer, parameter :: START(*) = [0,5,4,1,10,14,7]
+    integer, parameter :: END1=2020, END2=30000000
+    integer :: i, number
+    character(len=*), parameter :: METER = &
+"[                                                                            ]"
+    real :: t0, t1
+ 
+    call cpu_time(t0)
+    call game % init(START)
+    do i=size(START)+1, END1
+      call game % one_round()
+    end do
+    print '("Answer 15/1 is ",i0,l3)', game % prev_said, game%prev_said==203
 
-      do i=1, MAX_NUM !2020
-        if (i <= size(START)) then
-          call game % say_init(START(i))
-        else
-          call game % say_next(number)
-        end if
-      end do
-      print *, 'Answer is : ', game % last_said
-    end subroutine day15
+    write(*,'(a)',advance='no') METER
+    do i=1,len(METER)-1
+      write(*,'(a)',advance='no') achar(8)
+    enddo
+    do i=END1+1, END2
+      call game % one_round()
+      !if (mod(i,1000000)==0) print '("Turn ",i0,"  Hash size ",i0)',game%time,game%hash%count() 
+      if (mod(i,END2/(len(METER)-2))==0) write(*,'(a)',advance='no') '.'
+    end do
+    write(*,*)
+    print '("Answer 15/2 is ",i0,l3)', game % prev_said, game%prev_said==9007186
+    call cpu_time(t1)
+    print '("Time taken ",f8.3," seconds")', t1-t0
+  end subroutine day15
 
 
 
@@ -622,7 +640,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
       !call cw % print()
     end do
     ans = count(cw % cube)
-    print '("Active cubes ",i0,l1)', ans, &
+    print '("Day17: Active cubes ",i0,l1)', ans, &
       (mode==1 .and. (ans==112 .or. ans==348)) .or. &
       (mode==2 .and. (ans==848 .or. ans==2236))
     print *
@@ -751,8 +769,8 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
     ! Part 2 - just sort the list
     call allergens % sort(unsafe)
-    print '("List of all allergens/unsafe ingredients (sorted)")'
-    print '("=================================================")'
+    print '("List of all allergens/unsafe ingredients (Answer 21/2)")'
+    print '("======================================================")'
     print '(a)', allergens%print()
     print '(a)', unsafe%print(',')
     print '(l1)', unsafe%print(',')=='bjq,jznhvh,klplr,dtvhzt,sbzd,tlgjzx,ctmbr,kqms'
@@ -775,7 +793,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     call g % play_game(game_winner, .false.)
     score = g%score(game_winner)
     call cpu_time(t1)
-    print '("Winner is ",i0," with score ",i0)', game_winner, score
+    print '("22/1: Winner is ",i0," with score ",i0)', game_winner, score
     print '(l1,a,f8.3)', score==32472 .or. score==306, "    Time taken ",t1-t0
 
     ! Part Two - Recursive combat
@@ -784,7 +802,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     call g % play_game(game_winner, .true.)
     score = g%score(game_winner)
     call cpu_time(t1)
-    print '("Winner is ",i0," with score ",i0)', game_winner, score
+    print '("22/2: Winner is ",i0," with score ",i0)', game_winner, score
     print '(l1,a,f8.3)', score==36463 .or. score==291,"    Time taken ",t1-t0
   end subroutine day22
 
@@ -806,7 +824,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     do i=1,100
       call cups1 % move()
     end do
-    print '(a)', 'Final state - part 1'
+    print '(a)', 'Final state - 23/1'
     call cups1 % print()
 
     ! Part 2
@@ -818,7 +836,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     ca => cups2 % cups(1)%ptr%next
     cb => ca % next
     mult = int(ca%id,kind=I8B) * int(cb%id, kind=I8B)
-    print '(/a)', 'Simulation complete for part 2'
+    print '(/a)', 'Simulation complete for 23/2'
     print '("Numbers behind 1 are ",i0," * ",i0," = ",i0)',ca%id, cb%id, mult
     print '("Valid? ", l1)', 11591415792_I8B==mult .or. 149245887792_I8B==mult
     call cpu_time(t1)
@@ -846,14 +864,14 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
     call flr % init(tiles)
     ans = flr % blacks()
-    print *, 'Answer to part 1 is :', ans, ans==360 .or. ans==10
+    print *, 'Answer to 24/1 is :', ans, ans==360 .or. ans==10
     call flr%print()
     do i=1,100
       call flr % expand()
     end do
     call flr%print()
     ans = flr%blacks()
-    print *, 'Answer to part 2 is :', ans, ans==2208 .or. ans==3924
+    print *, 'Answer to 24/2 is :', ans, ans==2208 .or. ans==3924
   end subroutine day24
 
 
@@ -877,5 +895,5 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     print '("ls   = ",2(i8,1x))', card_ls, door_ls
     enc_key = handshake(card_ls, door_ls, card_key, door_key)
     if (enc_key < 0) error stop 'hanshake failed'
-    print '("key  = ",i8,1x,l1)', enc_key, enc_key==5025281 .or. enc_key==14897079
+    print '("Ans 25/1 key  = ",i8,1x,l1)', enc_key, enc_key==5025281 .or. enc_key==14897079
   end subroutine day25

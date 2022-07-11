@@ -61,6 +61,7 @@
       do i=1,nrow
         read(fid,'(*(a))') aa(:,i)
       end do
+      close(fid)
       aa = transpose(aa)
     end function read_pattern
 

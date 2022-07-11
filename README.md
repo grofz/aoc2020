@@ -6,7 +6,7 @@ Solutions to Advent of Code 2020 in Fortran
 - Day 2: Password Philosophy
 - Day 3: Toboggan Trajectory
 - Day 4: Passport Processing
-- Day 5: Day 5: Binary Boarding
+- Day 5: Binary Boarding
 - Day 6: Custom Customs
 - Day 7: Handy Haversacks
 - Day 8: Handheld Halting
