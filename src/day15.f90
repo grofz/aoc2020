@@ -1,5 +1,9 @@
 !
-! DAY 15 - 
+! DAY 15 - Recitation
+!
+!
+! This implementation uses red-hlack tree as a map. It is much slower than
+! version B which uses just large preallocated array.
 !
 module day15_mod
   use tree_m, only : rbtr_t, tree_mold, DAT_KIND
@@ -41,9 +45,10 @@ contains
 
 
 
-  subroutine game_init(this, starting_arr)
+  subroutine game_init(this, starting_arr, idummy)
     class(game_t), intent(out) :: this
     integer, intent(in) :: starting_arr(:)
+    integer, intent(in) :: idummy ! unused in TREE implementation
     integer :: n0, i
 
     this%hash = rbtr_t(hash_compare) ! must be initialized
@@ -64,7 +69,7 @@ contains
     integer(DAT_KIND), allocatable :: handle(:)
 
     val = hash_get(this%hash, this%prev_said, handle)
-    if (val == 0) then 
+    if (val == 0) then
       call hash_update(this%hash, this%prev_said, this%time)
       this%prev_said = 0
     else

@@ -1,6 +1,8 @@
   program main
     implicit none
-    goto 15
+    real :: t0, t1
+    call cpu_time(t0)
+!goto 15
 
 01  call day01('inp/01/input.txt')
     !call day01('inp/01/sample.txt')
@@ -47,7 +49,7 @@
     !call day14('inp/14/sample2.txt')
 
 15  call day15()
-stop
+!stop
 
 16  call day16('inp/16/input.txt')
     !call day16('inp/16/sample2.txt')
@@ -82,6 +84,11 @@ stop
 
 25  call day25('inp/25/input.txt')
     !call day25('inp/25/test.txt')
+
+    call cpu_time(t1)
+    print *
+    print '("ADVENT OF CODE 2020 COMPLETED!")'
+    print '("Total time taken ",f8.3," seconds")', t1-t0
   end program main
 
 
@@ -543,7 +550,9 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
 
 
   subroutine day15()
-    use day15_mod
+    !use day15_mod
+    use day15b_mod   ! faster implementation
+
     implicit none
     type(game_t) :: game
     !integer, parameter :: START(*) = [3, 1, 2]
@@ -553,9 +562,9 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     character(len=*), parameter :: METER = &
 "[                                                                            ]"
     real :: t0, t1
- 
+
     call cpu_time(t0)
-    call game % init(START)
+    call game % init(START, END2)
     do i=size(START)+1, END1
       call game % one_round()
     end do
@@ -567,7 +576,7 @@ print *, i, count(forms(i)%ans), count(forms2(i)%ans)
     enddo
     do i=END1+1, END2
       call game % one_round()
-      !if (mod(i,1000000)==0) print '("Turn ",i0,"  Hash size ",i0)',game%time,game%hash%count() 
+      !if (mod(i,1000000)==0) print '("Turn ",i0,"  Hash size ",i0)',game%time,game%hash%count()
       if (mod(i,END2/(len(METER)-2))==0) write(*,'(a)',advance='no') '.'
     end do
     write(*,*)
